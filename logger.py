@@ -33,6 +33,7 @@ class Logger:
             f.write(time_str)
             f.write(level_str)
             f.write(msg)
+            f.write("\n")
 
     @staticmethod
     def get_up_time():
