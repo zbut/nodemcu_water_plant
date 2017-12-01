@@ -12,11 +12,22 @@ class TempHumiditySensor(object):
         try:
             self._dht = dht.DHT22(machine.Pin(TempHumiditySensor.DATA_PIN))
             # Try to measure
-            self.measure()
+            self._dht.measure()
             log.log_msg(logger.INFO, "Initiation done")
         except Exception as e:
             log.log_msg(logger.ERROR, "Could not initiate sensor: {}".format(e))
 
     def measure(self):
-        self._dht.measure()
-        return self._dht.temperature(), self._dht.humidity()
+        log = logger.get_logger()
+        log.log_msg(logger.INFO, "Measuring temp and humid")
+        temp = -1
+        humid = -1
+        try:
+            self._dht.measure()
+            temp = self._dht.temperature()
+            humid = self._dht.humidity()
+            log.log_msg(logger.INFO, "Measured temperature {} and humidity {}".format(temp, humid))
+        except Exception as e:
+            log.log_msg("Could not measure: {}".format(e))
+        finally:
+            return temp, humid
